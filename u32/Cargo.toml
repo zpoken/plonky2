@@ -13,5 +13,6 @@ num = { version = "0.4", default-features = false }
 plonky2 = { git = "https://github.com/staaason/plonky2.git" }
 
 [dev-dependencies]
-plonky2 = { git = "https://github.com/staaason/plonky2.git", default-features = false, features = ["gate_testing"] }
+#plonky2 = { git = "https://github.com/staaason/plonky2.git", default-features = false, features = ["gate_testing"] }
+plonky2 = { path = "../plonky2", default-features = false, features = ["gate_testing"] }
 rand = { version = "0.8.4", default-features = false, features = ["getrandom"] }
