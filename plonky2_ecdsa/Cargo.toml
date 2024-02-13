@@ -16,8 +16,7 @@ num = { version = "0.4.0", default-features = false }
 #plonky2 = { git = "https://github.com/staaason/plonky2.git" }
 #plonky2_u32 = { git = "https://github.com/staaason/plonky2-u32.git", default-features = false }
 plonky2 = { path = "../plonky2"}
-#plonky2_u32 = { path = "../plonky2_u32", default-features = false }
-plonky2_u32 = { git = "https://github.com/zpoken/plonky2", rev = "dfd1a4dd7f94e879993e92a3b8a6c010efc21ae4", default-features = false }
+plonky2_u32 = { path = "../plonky2_u32", default-features = false }
 serde = { version = "1.0", default-features = false, features = ["derive"] }
 
 [dev-dependencies]
