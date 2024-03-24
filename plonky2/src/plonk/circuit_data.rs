@@ -12,10 +12,11 @@
 //! The verifier data can similarly be extracted by calling [`CircuitData::verifier_data`].
 //! This is useful to allow even small devices to verify plonky2 proofs.
 
-use alloc::collections::BTreeMap;
-use alloc::vec;
-use alloc::vec::Vec;
+#[cfg(not(feature = "std"))]
+use alloc::{collections::BTreeMap, vec, vec::Vec};
 use core::ops::{Range, RangeFrom};
+#[cfg(feature = "std")]
+use std::collections::BTreeMap;
 
 use anyhow::Result;
 use serde::Serialize;
@@ -156,7 +157,7 @@ impl<F: RichField + Extendable<D>, C: GenericConfig<D, F = F>, const D: usize>
 }
 
 /// Circuit data required by the prover or the verifier.
-#[derive(Eq, PartialEq, Debug, Clone)]
+#[derive(Eq, PartialEq, Debug)]
 pub struct CircuitData<F: RichField + Extendable<D>, C: GenericConfig<D, F = F>, const D: usize> {
     pub prover_only: ProverOnlyCircuitData<F, C, D>,
     pub verifier_only: VerifierOnlyCircuitData<C, D>,
@@ -251,6 +252,7 @@ impl<F: RichField + Extendable<D>, C: GenericConfig<D, F = F>, const D: usize>
 /// structure as succinct as we can. Thus we include various precomputed data which isn't strictly
 /// required, like LDEs of preprocessed polynomials. If more succinctness was desired, we could
 /// construct a more minimal prover structure and convert back and forth.
+#[derive(Debug)]
 pub struct ProverCircuitData<
     F: RichField + Extendable<D>,
     C: GenericConfig<D, F = F>,
@@ -333,7 +335,7 @@ impl<F: RichField + Extendable<D>, C: GenericConfig<D, F = F>, const D: usize>
 }
 
 /// Circuit data required by the prover, but not the verifier.
-#[derive(Eq, PartialEq, Debug, Clone)]
+#[derive(Eq, PartialEq, Debug)]
 pub struct ProverOnlyCircuitData<
     F: RichField + Extendable<D>,
     C: GenericConfig<D, F = F>,
@@ -412,7 +414,7 @@ impl<C: GenericConfig<D>, const D: usize> VerifierOnlyCircuitData<C, D> {
 }
 
 /// Circuit data required by both the prover and the verifier.
-#[derive(Debug, Eq, PartialEq, Serialize, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub struct CommonCircuitData<F: RichField + Extendable<D>, const D: usize> {
     pub config: CircuitConfig,
 

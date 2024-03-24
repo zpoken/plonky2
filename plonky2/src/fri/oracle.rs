@@ -1,5 +1,5 @@
-use alloc::format;
-use alloc::vec::Vec;
+#[cfg(not(feature = "std"))]
+use alloc::{format, vec::Vec};
 
 use itertools::Itertools;
 use plonky2_field::types::Field;
@@ -26,7 +26,7 @@ use crate::util::{log2_strict, reverse_bits, reverse_index_bits_in_place, transp
 pub const SALT_SIZE: usize = 4;
 
 /// Represents a FRI oracle, i.e. a batch of polynomials which have been Merklized.
-#[derive(Eq, PartialEq, Debug, Clone)]
+#[derive(Eq, PartialEq, Debug)]
 pub struct PolynomialBatch<F: RichField + Extendable<D>, C: GenericConfig<D, F = F>, const D: usize>
 {
     pub polynomials: Vec<PolynomialCoeffs<F>>,

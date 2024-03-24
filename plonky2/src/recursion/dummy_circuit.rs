@@ -1,6 +1,9 @@
-use alloc::string::{String, ToString};
-use alloc::vec;
-use alloc::vec::Vec;
+#[cfg(not(feature = "std"))]
+use alloc::{
+    string::{String, ToString},
+    vec,
+    vec::Vec,
+};
 
 use hashbrown::HashMap;
 use plonky2_field::extension::Extendable;
@@ -143,7 +146,7 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilder<F, D> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct DummyProofGenerator<F, C, const D: usize>
 where
     F: RichField + Extendable<D>,

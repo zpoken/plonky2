@@ -1,7 +1,10 @@
-use alloc::boxed::Box;
-use alloc::string::{String, ToString};
-use alloc::vec;
-use alloc::vec::Vec;
+#[cfg(not(feature = "std"))]
+use alloc::{
+    boxed::Box,
+    string::{String, ToString},
+    vec,
+    vec::Vec,
+};
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
@@ -15,7 +18,6 @@ use crate::iop::witness::{PartialWitness, PartitionWitness, Witness, WitnessWrit
 use crate::plonk::circuit_data::{CommonCircuitData, ProverOnlyCircuitData};
 use crate::plonk::config::GenericConfig;
 use crate::util::serialization::{Buffer, IoResult, Read, Write};
-use dyn_clonable::clonable;
 
 /// Given a `PartitionWitness` that has only inputs set, populates the rest of the witness using the
 /// given set of generators.
@@ -100,9 +102,9 @@ pub fn generate_partial_witness<
     witness
 }
 
-#[clonable]
+/// A generator participates in the generation of the witness.
 pub trait WitnessGenerator<F: RichField + Extendable<D>, const D: usize>:
-'static + Send + Sync + Debug + Clone
+    'static + Send + Sync + Debug
 {
     fn id(&self) -> String;
 
@@ -118,13 +120,12 @@ pub trait WitnessGenerator<F: RichField + Extendable<D>, const D: usize>:
     fn serialize(&self, dst: &mut Vec<u8>, common_data: &CommonCircuitData<F, D>) -> IoResult<()>;
 
     fn deserialize(src: &mut Buffer, common_data: &CommonCircuitData<F, D>) -> IoResult<Self>
-        where
-            Self: Sized;
+    where
+        Self: Sized;
 }
 
 /// A wrapper around an `Box<WitnessGenerator>` which implements `PartialEq`
 /// and `Eq` based on generator IDs.
-#[derive(Clone)]
 pub struct WitnessGeneratorRef<F: RichField + Extendable<D>, const D: usize>(
     pub Box<dyn WitnessGenerator<F, D>>,
 );
@@ -224,7 +225,7 @@ pub trait SimpleGenerator<F: RichField + Extendable<D>, const D: usize>:
         Self: Sized;
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct SimpleGeneratorAdapter<
     F: RichField + Extendable<D>,
     SG: SimpleGenerator<F, D> + ?Sized,
@@ -234,7 +235,7 @@ pub struct SimpleGeneratorAdapter<
     inner: SG,
 }
 
-impl<F: RichField + Extendable<D>, SG: SimpleGenerator<F, D> + Clone, const D: usize> WitnessGenerator<F, D>
+impl<F: RichField + Extendable<D>, SG: SimpleGenerator<F, D>, const D: usize> WitnessGenerator<F, D>
     for SimpleGeneratorAdapter<F, SG, D>
 {
     fn id(&self) -> String {
@@ -267,7 +268,7 @@ impl<F: RichField + Extendable<D>, SG: SimpleGenerator<F, D> + Clone, const D: u
 }
 
 /// A generator which copies one wire to another.
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default)]
 pub struct CopyGenerator {
     pub(crate) src: Target,
     pub(crate) dst: Target,
@@ -300,7 +301,7 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D> for Cop
 }
 
 /// A generator for including a random value
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default)]
 pub struct RandomValueGenerator {
     pub(crate) target: Target,
 }
@@ -330,7 +331,7 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D> for Ran
 }
 
 /// A generator for testing if a value equals zero
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default)]
 pub struct NonzeroTestGenerator {
     pub(crate) to_test: Target,
     pub(crate) dummy: Target,
