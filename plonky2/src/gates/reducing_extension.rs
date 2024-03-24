@@ -182,7 +182,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Gate<F, D> for ReducingExtens
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct ReducingGenerator<const D: usize> {
     row: usize,
     gate: ReducingExtensionGate<D>,
