@@ -562,7 +562,7 @@ impl<F: RichField + Extendable<D>, const D: usize> CircuitBuilder<F, D> {
         self.generators.extend(generators);
     }
 
-    pub fn add_simple_generator<G: SimpleGenerator<F, D>>(&mut self, generator: G) {
+    pub fn add_simple_generator<G: SimpleGenerator<F, D> + Clone>(&mut self, generator: G) {
         self.generators
             .push(WitnessGeneratorRef::new(generator.adapter()));
     }
