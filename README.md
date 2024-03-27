@@ -3,6 +3,7 @@
 
 This repository was originally for Plonky2, a SNARK implementation based on techniques from PLONK and FRI. It has since expanded to include tools such as Starky, a highly performant STARK implementation.
 
+The main change made to the above version of plonky2 is the addition of the Clone attribute to enable deep cloning in WitnessGenerator, including the following structures: SquareRootGenerator, PolynomialBatch, EqualityGenerator, QuotientGeneratorExtension, LowHighGenerator, BaseSumGenerator, SplitGenerator, WireSplitGenerator, BaseSplitGenerator, InterpolationGenerator, ExponentiationGenerator, PoseidonGenerator, RandomAccessGenerator, ReducingGenerator, WitnessGeneratorRef, SimpleGeneratorAdapter, CopyGenerator, RandomValueGenerator, NonzeroTestGenerator, CircuitData, ProverOnlyCircuitData, DummyProofGenerator.
 
 ## Documentation
 
